@@ -8,21 +8,30 @@ let s0 = new S()
 
 // Test1) Configuring Server
 
+
+console.log("How about RAM, CACHE, Storage?");
+
+
 s0.program({
     "config": {
-     * Imported modules
-     * Logging
-     *  - where
-     *  - how often
-     *  - reasons to log
-     * 
+     * SessionManagement
+     *
+     * SpecializedServerSelection?
+     *  --- HttpServer
+     *  --- SocketServer
+     *  --- StaticSiteServer
      * SSL?
+     * Backlog queues
      * 
-     * Ports
+     * DSP: Development, Staging, Production
      * 
-     * Host
      * 
-     * Backlog Queue
+     **** Websockets Config ****
+     * 
+     * 
+     * 
+     *** Fastify's config ***
+     * 
      * 
      * * // Fastify Listen Config
      * host:        String,
@@ -75,13 +84,27 @@ s0.program({
      * verifications ... ip, session, authentications
      * *********************************
      * 
-     * 
-     * 
-     * routing syntax
-     * 
-     * 
-     * **********************************
+     *
+     * ************************************
      * *** All configs for other properties
+     *  
+     * routes-config
+     *      routing syntax
+     * params-config
+     * 
+     * permissions-config
+     * 
+     * middleware-config
+     
+     * models-config
+     * 
+     * jobqueues-config
+     * 
+     * services-config
+     * 
+     * spec-config
+     * 
+
     },
     "routes": {
         // database actions // cruds are needed // get, post, update, delete
@@ -115,6 +138,21 @@ s0.program({
 
         // transport structure // json structure
 
+        // route handler
+        //  - validation:   (validates param inputs)
+        //  - sync:         (synchronous / asynchronous)
+        //  - stages:       (before, during, after)
+        //  - on:           (success, error, await, service call)
+        //  - journey:      (mentioned above)
+        //  - jobqueue      (inserting/removing) queues
+
+
+
+        // data can be fetched from the database, sent to the server,
+        //  then if the request was valid, it can be used and destroyed
+
+
+
 
     },
     "params":             {
@@ -122,6 +160,11 @@ s0.program({
     },
     "permissions":        {
         // limit information retrievable/modifiable by request
+
+        // can be applied as
+        //  - middleware
+        //  - anywhere in route handler
+
     },
     "middleware":         {
         // middleware used during routes
