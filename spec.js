@@ -26,15 +26,10 @@ s0.program({
       ],
       SSL:                      Boolean,
       BacklogQueues:            String,
-      
       DSP: ['development','staging', 'production'],
-
-    //   Protocols allowed
-          
       "config-websockets": {
         port: Number
       },
-      
       "config-fastify": { // fastify is an http server
 
         listen: {
@@ -85,6 +80,15 @@ s0.program({
       // verifications ... ip, session, authentications // middleware
       // SessionManagement: // middleware
       "config-prop-params": {
+
+      },
+      "config-prop-permissions": {
+
+      },
+      "config-prop-middleware": {
+        ???
+      },
+      "config-prop-models": {
 
       },
       "config-prop-routes": {
@@ -157,15 +161,6 @@ s0.program({
 
 
       },
-      "config-prop-permissions": {
-
-      },
-      "config-prop-middleware": {
-        ???
-      },
-      "config-prop-models": {
-
-      },
       "config-prop-jobqueues": {
 
       },
@@ -180,20 +175,17 @@ s0.program({
     "params": {
         // all variable inputs must be scrubbed
     },
-    "routes": {
-        "<route name>": {
-            "db-method": {
-                middleware:     [Function],
-                routeHandler:   String | Function
-            },
-        }
-    },
     "permissions": {
         // limit information retrievable/modifiable by request
 
         // can be applied as
         //  - middleware
         //  - anywhere in route handler
+
+        // *** all permissions are middleware *** //
+        // a routeHandlerCanDetermine how middleware effects actions //
+
+        validSender:    Function,       // request sent by Specified IP. How to dodge Spoofing?
 
         banned:         Function,
 
@@ -217,31 +209,145 @@ s0.program({
 
         OneTimeUse:     Function,       // immediately expires auth token for access.
 
-        PassOneDay:     Function,
+        PassOneDay:     Function,       
         PassWeek:       Function,
         PassMonth:      Function,
         PassYear:       Function,
-        PassUnlimited:  Function,
+        PassUnlimited:  Function
     },
     "middleware": {
+
+        // global, specific route
+
         // middleware used during routes
+
+        // validate request params
+        // validate request body
+
+        // cookie renew
+        // cookie valid
+        // cookie expire
+
+        // redirect 
+
+        // loadstatic // standby static information
+
+        // passport
+        // serve-favicon
+        // apicache
+        // bodyparser
+        // cookie parser
+        // cors                     // cross site acceptance
+        // http-proxy-middleware
+        // multer                   // uploading files
+        // cookie session
+        // nocache                  // obliterates static client files
+        // helmet-csp               // content security policy
+        // server-timing
+        // csurf                    // CSRF token
+
+        // memory-cache     // not middleware
     },
     "models": {
         // acceptable formats when communicating with databases
+        // models get dropped into here from database source code
+    },
+    "routes": {
+        "<route name>": {
+            "db-method": {
+                middleware:     [Function],
+                routeHandler:   String | Function
+            },
+        }
     },
     "jobQueues": {
         // Do this task when
+            // route enabled jobqueues
+            // system jobqueues
+
+        /** interface 
+         * 
+            *  ? frequency
+            *  ? dowhat
+            *  ? notify who
+        */
+        system: {
+            flushmemory: {
+
+            },
+            samplerequests: {
+
+            },
+            backupmemory: {
+
+            },
+            expirecookie: {
+
+            },
+            expiresession: {
+
+            },
+            routineSpec: {
+
+            },
+            updateOSsoftware: {
+
+            },
+            updateProjectSoftware: {
+
+            },
+            securityUpdate: {
+
+            },
+            reportToDevOps: {
+
+            }
+        },
+        routeEnabled: {
+
+        }
     },
     "services": {
-        // location (localhost, remote)
-        // ownership (inhouse, 3rd-party)
-        // services
-            // Databases
-            // Regular Servers
-            // API Servers
+        /* service interface:
+
+            "<service name>": {
+
+                ownership:  String,
+                alias:  String,
+                path:   String
+
+                onConnect         successful ... problematic
+                onDisConnect      successful ... problematic
+
+                serviceSpecificConnectionConfig: Object
+            }
+        */
+        "service name": {
+            alias:  String | null,
+            path:   "mongodb://27071/<dbname>"
+            // relevant configs
+        },
+        "service name": {
+            alias:  String | null,
+            path:   "localhost:3030"
+            // relevant configs
+        },
+        "service name": {
+            alias:  String | null,
+            path:   "www.maps.google.com/<authtoken>"
+            // relevant configs
+        }
     },
     "spec": {
         // programmable tests by developer
+        // routine specs optionable insertable to jobqueue
+
+
+        // test init (local, remote)
+
+        bootstrap:  {},
+        routes:     {},
+        jobqueues:  {}
     }
 });
 
