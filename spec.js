@@ -13,6 +13,9 @@ console.log("How about RAM, CACHE, Storage?");
 
 
 s0.program({
+    modules: { // refers pakage.json
+
+    },
     "config": {
     /** Config Property, 
      *  *** refers to all backend configurations *** 
@@ -24,9 +27,30 @@ s0.program({
        "Server StaticSite",
        "Server Streaming"
       ],
-      SSL:                      Boolean,
+      configSSL: {
+        SSL_all:    Boolean,
+        http:       Boolean,
+        sockets:    Boolean
+        // etc
+      },
       BacklogQueues:            String,
-      DSP: ['development','staging', 'production'],
+      OS: {
+          "linux":      {},
+          "darwin":     {},
+          "msoft":      {}
+      },
+      DSP: {
+        //   'mode':           String, // props below
+          'dev': { // development
+            host: ""
+          },
+          'stage': { // stage
+            host: ""
+          }, 
+          'prod': { // production
+            host: ""
+          }
+      },
       "config-websockets": {
         port: Number
       },
@@ -74,9 +98,9 @@ s0.program({
             "propertyName": Function
         }
       },
-      connections: {
-        //Connections ... Servers/Databases/3rdparty, etc
-      },
+    //   connections: {
+    //     //Connections ... Servers/Databases/3rdparty, etc
+    //   },
       // verifications ... ip, session, authentications // middleware
       // SessionManagement: // middleware
       "config-prop-params": {
@@ -86,25 +110,26 @@ s0.program({
 
       },
       "config-prop-middleware": {
-        ???
+ 
       },
       "config-prop-models": {
 
       },
       "config-prop-routes": {
         routingSyntax: Function,
-        cruds:          Boolean,        // db calls authorized attributes/schemas
-        redirects:      Object,         // route forwarding to other routes
-        page:           Object,         // changes website page
-        statuscheck:    Object,         // server notified by clientside actions specifically programmed by site maintainer
-        special:        Object,         // db calls special/custom actions
-
-        // Do the routes mirror static methods executed by public methods?
-        // Do the routes mirror the websites active pages?
-        // Do the routes mirror the websites components?
-        // Do the routes mirror website actions
-        // Do the routes mirror general purpose actions
-        // Do the routes mirror content?    Selectable Data
+        // quick setup
+        routesMirrorPublicMethods:                Boolean,
+        routesMirrorFrontendComponents:           Boolean,
+        routesMirrorHtmlPages:                    Boolean,
+        routesMirrorWebsiteActions:               Boolean,
+        routesMirrorGeneralPurposeActions:        Boolean,
+        routesMirrorFrontendContent:              Boolean,  
+        // ???         
+        cruds:                                    Boolean,        // db calls authorized attributes/schemas
+        redirects:                                Object,         // route forwarding to other routes
+        page:                                     Object,         // changes website page
+        monitorclient:                            Object,         // server notified by clientside actions specifically programmed by site maintainer
+        custom:                                   Object,         // db calls special/custom actions
 
 
         routeHandlers:   Object        // can also be an object
@@ -125,21 +150,21 @@ s0.program({
          * }
          * 
         */
-        // route handler
-        //  - validation:   (validates param inputs)
-        //  - sync:         (synchronous / asynchronous)
-        //  - stages:       (before, during, after)
-        //  - on:           (success, error, await, service call)
-        //  - journey:      (mentioned above)
-        //  - jobqueue      (inserting/removing) queues
+        route handler interface
+         - validation:   (validates param inputs)
+         - sync:         (synchronous / asynchronous)
+         - stages:       (before, during, after)
+         - on:           (success, error, await, service call)
+         - journey:      (mentioned above)
+         - jobqueue      (inserting/removing) queues
 
         // purpose  // why this route is different?
 
-        // directions // journey // one way, return trip, roundtrip
-        //  -   client->server->client
-        //  -   client->server
-        //  -   server->client->server
-        //  -   server->client
+        directions // journey // one way, return trip, roundtrip
+         -   client->server->client
+         -   client->server
+         -   server->client->server
+         -   server->client
 
         // handshakes / internet protocols // request headers effected
         //  - https
@@ -158,8 +183,6 @@ s0.program({
 
         // data can be fetched from the database, sent to the server,
         //  then if the request was valid, it can be used and destroyed
-
-
       },
       "config-prop-jobqueues": {
 
@@ -209,6 +232,8 @@ s0.program({
 
         OneTimeUse:     Function,       // immediately expires auth token for access.
 
+        PassOneMinute:  Function,
+        PassOneHour:    Function,
         PassOneDay:     Function,       
         PassWeek:       Function,
         PassMonth:      Function,
@@ -221,30 +246,48 @@ s0.program({
 
         // middleware used during routes
 
-        // validate request params
-        // validate request body
+        openAPI:                Boolean,
 
-        // cookie renew
-        // cookie valid
-        // cookie expire
+        validateRequestParams:  Boolean,
+        validateRequestBody:    Boolean,
+        validateRequestQryStr:  Boolean,
+
+        DetectBot:              Boolean,
+        DetectAbuse:            Boolean,    
+        DetectRefreshAbuse:     Boolean,
+        DetectRequestAbuse:     Boolean,
+
+        cookieRenew:            Boolean,
+        cookieValid:            Boolean,
+        cookieExpire:           Boolean,
 
         // redirect 
+        redirectRequest:        Boolean,
+        fakeResponse:           Boolean,
 
         // loadstatic // standby static information
 
-        // passport
-        // serve-favicon
-        // apicache
-        // bodyparser
-        // cookie parser
-        // cors                     // cross site acceptance
-        // http-proxy-middleware
-        // multer                   // uploading files
-        // cookie session
-        // nocache                  // obliterates static client files
-        // helmet-csp               // content security policy
-        // server-timing
-        // csurf                    // CSRF token
+        loadAllStatic:          Boolean,
+        loadHTML:               Boolean,
+        loadCSS:                Boolean,
+        loadJS:                 Boolean,
+        loadIMG:                Boolean,
+
+        Auth2Step:              Boolean,
+
+        passport:               Boolean,
+        servefavicon:           Boolean,
+        apicache:               Boolean,
+        bodyparser:             Boolean,
+        cookieparser:           Boolean,
+        cors:                   Boolean,    // cross site acceptance
+        httpproxymiddleware:    Boolean,
+        multer:                 Boolean,    // uploading files
+        cookiesession:          Boolean,
+        nocache:                Boolean,    // obliterates static client files
+        helmetcsp:              Boolean,    // content security policy
+        servertiming:           Boolean,
+        csurf:                  Boolean     // CSRF token
 
         // memory-cache     // not middleware
     },
@@ -322,26 +365,10 @@ s0.program({
                 serviceSpecificConnectionConfig: Object
             }
         */
-        "service name": {
-            alias:  String | null,
-            path:   "mongodb://27071/<dbname>"
-            // relevant configs
-        },
-        "service name": {
-            alias:  String | null,
-            path:   "localhost:3030"
-            // relevant configs
-        },
-        "service name": {
-            alias:  String | null,
-            path:   "www.maps.google.com/<authtoken>"
-            // relevant configs
-        }
     },
     "spec": {
         // programmable tests by developer
         // routine specs optionable insertable to jobqueue
-
 
         // test init (local, remote)
 
