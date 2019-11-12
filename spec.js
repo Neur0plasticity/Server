@@ -8,9 +8,7 @@ let s0 = new S()
 
 // Test1) Configuring Server
 
-
 console.log("How about RAM, CACHE, Storage?");
-
 
 s0.program({
     modules: { // refers pakage.json
@@ -20,6 +18,9 @@ s0.program({
     /** Config Property, 
      *  *** refers to all backend configurations *** 
     */
+
+      BootAsync: Boolean, // default false
+
       SpecializedServerSelection: [
        "Server LoadBalancer",
        "Server Http",
@@ -51,8 +52,19 @@ s0.program({
             host: ""
           }
       },
-      "config-websockets": {
-        port: Number
+      "config-websockets": { // programmed as single connection for now
+        port: Number,
+        on: {
+          io: {
+            connecting:     String | Function,
+            connected:      String | Function,
+            disconnecting:  String | Function,
+            disconnected:   String | Function
+          },
+          client: {
+
+          }
+        }
       },
       "config-fastify": { // fastify is an http server
 
@@ -72,7 +84,7 @@ s0.program({
             bodyLimit:           Number,          // 1048576 (1MiB)
             onProtoPoisoning:    String,          // possible values are 'error', 'remove' and 'ignore'.
             ignoreTrailingSlash: Boolean,
-            logger:              !!!HELP!!!!,
+            logger:              Function,
             disableRequestLogging: Boolean,        // default false
             serverFactory:       Function,      
             modifyCoreObjects:   Boolean,          // default false
@@ -84,11 +96,11 @@ s0.program({
             pluginTimeout:       Number,           // default 10000 milliseconds
             queryStringParser:   Function,         // querystringParser: str => qs.parse(str)
             versioning:          Object,           // see documentation
-            return503OnClosing:  Boolean,          // default true
+            return503OnClosing:  Boolean          // default true
         },
         on: {//events
             ready:               Function,         // once server instance ready.
-            close:               Function,         // once server closes
+            close:               Function         // once server closes
         },
         //use:     // Inserting Middleware // middleware property uses this
         register: {
@@ -105,14 +117,35 @@ s0.program({
       // SessionManagement: // middleware
       "config-prop-params": {
 
+        // params dictacte functions inputs.
+        // they're everywhere
+        // refers to all core and plugin code
+
+        enforceAll: Boolean, // default true
+
+
+        interface: String, // [mongodb-style]
+
+
+
+
       },
       "config-prop-permissions": {
 
       },
       "config-prop-middleware": {
  
+        allAsync: Boolean,  // default false
+
+        preMiddleware: Function,
+        postMiddleware: Function
+
       },
       "config-prop-models": {
+        // all attributes must be mentioned in params
+
+        interface:  String, // ["universal"]
+
 
       },
       "config-prop-routes": {
@@ -130,6 +163,15 @@ s0.program({
         page:                                     Object,         // changes website page
         monitorclient:                            Object,         // server notified by clientside actions specifically programmed by site maintainer
         custom:                                   Object,         // db calls special/custom actions
+
+
+        // global: {
+        //     all: {},
+        //     get: {},
+        //     post: {},
+        //     put: {},
+        //     delete: {}
+        // },
 
 
         routeHandlers:   Object        // can also be an object
@@ -184,7 +226,7 @@ s0.program({
         // data can be fetched from the database, sent to the server,
         //  then if the request was valid, it can be used and destroyed
       },
-      "config-prop-jobqueues": {
+      "config-prop-jobQueues": {
 
       },
       "config-prop-services": {
@@ -197,6 +239,24 @@ s0.program({
     },
     "params": {
         // all variable inputs must be scrubbed
+        // interface equivalent to mongoose schema 
+
+        /** 
+         * 
+         * Due to the distributed server model,
+         * 
+         * parameters might be validated duplicately 
+         * 
+         * because of seperate machines, for sec reasons.
+         * 
+         * cannot let guard even in our own internal network tethers
+         * 
+        */
+    },
+    "models": {
+      // all attributes must be mentioned in params
+      // acceptable formats when communicating with databases
+      // models get dropped into here from database source code
     },
     "permissions": {
         // limit information retrievable/modifiable by request
@@ -246,6 +306,10 @@ s0.program({
 
         // middleware used during routes
 
+        // Why booleans? Only to indicate/consolidated enabled middlewares,
+        // must mention in routesHandler what middleware is applied per route
+
+
         openAPI:                Boolean,
 
         validateRequestParams:  Boolean,
@@ -291,16 +355,24 @@ s0.program({
 
         // memory-cache     // not middleware
     },
-    "models": {
-        // acceptable formats when communicating with databases
-        // models get dropped into here from database source code
-    },
     "routes": {
         "<route name>": {
-            "db-method": {
-                middleware:     [Function],
+            "<db-method>": {
+                middleware:     String | [String] | Function | [Function],
                 routeHandler:   String | Function
             },
+        }
+
+        // global-routes, specific-routes,
+
+
+          // "all":    {}
+          // "get":    {},
+          // "post":   {},
+          // "put":    {},
+          // "delete": {} 
+
+
         }
     },
     "jobQueues": {

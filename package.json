@@ -1,0 +1,38 @@
+{
+  "name": "ditributed-server",
+  "version": "1.0.0",
+  "description": "Easy Server Operations distrubtion. Split Applications preventing System wide failure.",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neur0plasticity/Server.git"
+  },
+  "keywords": [
+    "distributed",
+    "computing",
+    "distributed",
+    "server",
+    "distributed",
+    "server",
+    "model",
+    "cluster",
+    "asynchronous",
+    "concurrency"
+  ],
+  "author": "djtinkers365@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Neur0plasticity/Server/issues"
+  },
+  "homepage": "https://github.com/Neur0plasticity/Server#readme",
+  "dependencies": {
+    "fastify": "^2.10.0",
+    "mongoose": "^5.7.10"
+  }
+}
