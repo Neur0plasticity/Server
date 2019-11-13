@@ -163,65 +163,9 @@ s0.program({
         page:                                     Object,         // changes website page
         monitorclient:                            Object,         // server notified by clientside actions specifically programmed by site maintainer
         custom:                                   Object,         // db calls special/custom actions
-
-
-        // global: {
-        //     all: {},
-        //     get: {},
-        //     post: {},
-        //     put: {},
-        //     delete: {}
-        // },
-
-
+        
         routeHandlers:   Object        // can also be an object
-        /** routeHandlers 
-         * {
-         *      all:    function(request, response) {}
-         *      get:    function(request, response) {}
-         *      post:   function(request, response) {}
-         * 
-         *      download,
-         *      upload,
-         * 
-         *      crud
-         * 
-         *      redirect
-         * 
-         *      
-         * }
-         * 
-        */
-        route handler interface
-         - validation:   (validates param inputs)
-         - sync:         (synchronous / asynchronous)
-         - stages:       (before, during, after)
-         - on:           (success, error, await, service call)
-         - journey:      (mentioned above)
-         - jobqueue      (inserting/removing) queues
-
-        // purpose  // why this route is different?
-
-        directions // journey // one way, return trip, roundtrip
-         -   client->server->client
-         -   client->server
-         -   server->client->server
-         -   server->client
-
-        // handshakes / internet protocols // request headers effected
-        //  - https
-        //  - sockets
-        //  - udp
-        //  - hls
-        //  - ETC
-        //  - smtp
-        //  - ssh
-        //  - IRC
-
-            
-        // acceptable inputs/outputs // input output data formats/validations
-
-        // transport structure // json structure
+    
 
         // data can be fetched from the database, sent to the server,
         //  then if the request was valid, it can be used and destroyed
